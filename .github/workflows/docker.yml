@@ -34,7 +34,7 @@ jobs:
           push: true
           tags: hansohn/terraform:0.15
 
-      - name: Build and push debian
+      - name: Build and push 1.0
         uses: docker/build-push-action@v3
         with:
           build-args: 
@@ -43,7 +43,7 @@ jobs:
           push: true
           tags: hansohn/terraform:1.0
 
-      - name: Build and push debian
+      - name: Build and push 1.1
         uses: docker/build-push-action@v3
         with:
           build-args: 
@@ -52,7 +52,7 @@ jobs:
           push: true
           tags: hansohn/terraform:1.1
 
-      - name: Build and push debian
+      - name: Build and push 1.2
         uses: docker/build-push-action@v3
         with:
           build-args: 
