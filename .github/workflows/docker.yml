@@ -28,39 +28,39 @@ jobs:
       - name: Build and push 0.15
         uses: docker/build-push-action@v3
         env: 
-          TERRAFROM_VERSION: 0.15
+          TERRAFORM_VERSION: 0.15
         with:
           context: ./debian
           push: true
           tags:
-            - hansohn/terraform:${{ env.TERRAFROM_VERSION }}
+            - hansohn/terraform:${TERRAFORM_VERSION}
 
       - name: Build and push debian
         uses: docker/build-push-action@v3
         env: 
-          TERRAFROM_VERSION: 1.0
+          TERRAFORM_VERSION: 1.0
         with:
           context: ./debian
           push: true
           tags:
-            - hansohn/terraform:${{ env.TERRAFROM_VERSION }}
+            - hansohn/terraform:${TERRAFORM_VERSION}
 
       - name: Build and push debian
         uses: docker/build-push-action@v3
         env: 
-          TERRAFROM_VERSION: 1.1
+          TERRAFORM_VERSION: 1.1
         with:
           context: ./debian
           push: true
           tags:
-            - hansohn/terraform:${{ env.TERRAFROM_VERSION }}
+            - hansohn/terraform:${TERRAFORM_VERSION}
 
       - name: Build and push debian
         uses: docker/build-push-action@v3
         env: 
-          TERRAFROM_VERSION: 1.2
+          TERRAFORM_VERSION: 1.2
         with:
           context: ./debian
           push: true
           tags:
-            - hansohn/terraform:${{ env.TERRAFROM_VERSION }}
+            - hansohn/terraform:${TERRAFORM_VERSION}
