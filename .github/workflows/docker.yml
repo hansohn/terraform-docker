@@ -19,7 +19,7 @@ jobs:
           python${PYTHON_VERSION} -m pip install --upgrade pip
           python${PYTHON_VERSION} -m pip install tfrelease
           version_matrix=$(tfrelease -v | jq '[.versions|.[]]')
-          echo "::set-output name=version_matrix::$version_matrix"
+          echo ::set-output name=version_matrix::${version_matrix}
         env:
           PYTHON_VERSION: 3.9
 
