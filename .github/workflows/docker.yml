@@ -4,11 +4,33 @@ name: docker-build
 on:
   push:
     branches:
-      - 'main'
+      - main
 
 jobs:
-  docker:
+  matrix:
     runs-on: ubuntu-latest
+    outputs:
+      version_matrix: ${{ steps.generate-matrix.outputs.version_matrix }}
+    steps:
+      - name: generate-matrix
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y software-properties-common jq make
+          sudo add-apt-repository ppa:deadsnakes/ppa
+          sudo apt-get install --no-install-recommends -y python${PYTHON_VERSION} python${PYTHON_VERSION}-venv python3-pip
+          python3 -m pip install tfrelease
+          version_matrix=$(tfrelease -v | jq '[.versions|.[]]')
+          echo $version_matrix
+          echo "::set-output name=version_matrix::$version_matrix"
+        env:
+          PYTHON_VERSION: 3.9
+
+  docker:
+    needs: matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        versions: ${{ fromJson(needs.matrix.outputs.version_matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,43 +47,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push 0.15
-        uses: docker/build-push-action@v3
-        with:
-          build-args: |
-            TERRAFORM_VERSION=0.15.5
-          context: ./debian
-          push: true
-          tags: |
-            hansohn/terraform:0.15
+      - name: Compile tags
+        id: compile_tags
+        run: |
+          tags=()
+          for tag in ${{ matrix.versions.tags }}; do
+            tag+=("hansohn/terraform:${tag}")
+          done
+          echo "${tags[*]}"
+          echo "::set-output name=tags::$tags"
 
-      - name: Build and push 1.0
+      - name: Build and push ${{ matrix.versions.version }}
         uses: docker/build-push-action@v3
         with:
           build-args: |
-            TERRAFORM_VERSION=1.0.11
+            TERRAFORM_VERSION=${{ matrix.versions.version }}
           context: ./debian
           push: true
           tags: |
-            hansohn/terraform:1.0
-
-      - name: Build and push 1.1
-        uses: docker/build-push-action@v3
-        with:
-          build-args: |
-            TERRAFORM_VERSION=1.1.9
-          context: ./debian
-          push: true
-          tags: |
-            hansohn/terraform:1.1
-
-      - name: Build and push 1.2
-        uses: docker/build-push-action@v3
-        with:
-          build-args: |
-            TERRAFORM_VERSION=1.2.3
-          context: ./debian
-          push: true
-          tags: |
-            hansohn/terraform:1.2
-            hansohn/terraform:latest
+            ${{ steps.compile_tags.outputs.tags }}
