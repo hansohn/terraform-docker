@@ -16,8 +16,8 @@ jobs:
         run: |
           sudo add-apt-repository ppa:deadsnakes/ppa
           sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python3-pip
-          python3 -m pip install --upgrade pip
-          python3 -m pip install tfrelease
+          python${PYTHON_VERSION} -m pip install --upgrade pip
+          python${PYTHON_VERSION} -m pip install tfrelease
           version_matrix=$(tfrelease -v | jq '[.versions|.[]]')
           echo $version_matrix
           echo "::set-output name=version_matrix::$version_matrix"
