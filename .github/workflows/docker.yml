@@ -14,10 +14,8 @@ jobs:
     steps:
       - name: generate-matrix
         run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y software-properties-common jq make
           sudo add-apt-repository ppa:deadsnakes/ppa
-          sudo apt-get install --no-install-recommends -y python${PYTHON_VERSION} python${PYTHON_VERSION}-venv python3-pip
+          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python${PYTHON_VERSION}-venv python3-pip
           python3 -m pip install tfrelease
           version_matrix=$(tfrelease -v | jq '[.versions|.[]]')
           echo $version_matrix
