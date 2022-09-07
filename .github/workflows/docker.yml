@@ -15,12 +15,14 @@ jobs:
       - name: generate-matrix
         run: |
           sudo add-apt-repository ppa:deadsnakes/ppa
-          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python${PYTHON_VERSION}-venv python3-pip
+          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python3-pip
+          python3 -m pip install --upgrade pip
           python3 -m pip install tfrelease
           version_matrix=$(tfrelease -v | jq '[.versions|.[]]')
           echo $version_matrix
           echo "::set-output name=version_matrix::$version_matrix"
         env:
+          # PIP_INDEX_URL: "https://pypi.python.org/simple/" 
           PYTHON_VERSION: 3.9
 
   docker:
