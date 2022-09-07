@@ -50,10 +50,10 @@ jobs:
         run: |
           tags=()
           for tag in ${{ matrix.versions.tags }}; do
+            echo "hansohn/terraform:${tag}"
             tag+=("hansohn/terraform:${tag}")
           done
-          echo "${tags[*]}"
-          echo "::set-output name=tags::$tags"
+          echo ::set-output name=tags::${tags[@]}
 
       - name: Build and push ${{ matrix.versions.version }}
         uses: docker/build-push-action@v3
