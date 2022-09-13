@@ -48,7 +48,7 @@ jobs:
 
       - name: echo matrix
         run: |
-          echo "${{ matrix.versions.tags.* }}"
+          echo "${{ matrix.versions }}"
 
       - name: Build and push ${{ matrix.versions.version }}
         uses: docker/build-push-action@v3
