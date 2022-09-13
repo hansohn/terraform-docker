@@ -46,6 +46,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: echo matrix
+        run: |
+          echo "${{ matrix.versions.tags }}"
+
       - name: Build and push ${{ matrix.versions.version }}
         uses: docker/build-push-action@v3
         with:
@@ -53,4 +57,5 @@ jobs:
             TERRAFORM_VERSION=${{ matrix.versions.version }}
           context: ./debian
           push: false
-          tags: ${{ matrix.versions.tags }}
+          tags: |
+            ${{ matrix.versions.tags }}
