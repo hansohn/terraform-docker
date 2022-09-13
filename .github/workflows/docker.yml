@@ -53,5 +53,4 @@ jobs:
             TERRAFORM_VERSION=${{ matrix.versions.version }}
           context: ./debian
           push: false
-          tags: |
-            ${{ matrix.versions.tags }}
+          tags: ${{ matrix.versions.tags }}
