@@ -19,9 +19,8 @@ jobs:
           python${PYTHON_VERSION} -m pip install --upgrade pip
           python${PYTHON_VERSION} -m pip install tfrelease
           tfrelease=$(tfrelease -vMmLt "hansohn/terraform:{tag}")
-          TFRELEASE_JSON=${{ toJson(${tfrelease}) }}
-          echo ${TFRELEASE_JSON}
-          echo ::set-output name=tfrelease::${TFRELEASE_JSON}
+          echo ${tfrelease}
+          echo ::set-output name=tfrelease::${tfrelease}
         env:
           PYTHON_VERSION: 3.9
 
