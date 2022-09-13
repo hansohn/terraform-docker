@@ -10,7 +10,7 @@ jobs:
   matrix:
     runs-on: ubuntu-latest
     outputs:
-      version_matrix: ${{ fromJson(steps.generate-matrix.outputs.tfrelease) }}
+      version_matrix: ${{ steps.generate-matrix.outputs.tfrelease }}
     steps:
       - id: generate-matrix
         run: |
