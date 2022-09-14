@@ -70,6 +70,7 @@ jobs:
         env:
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_ID }}
           SLACK_COLOR: ${{ job.status }}
+          SLACK_FOOTER: ""
           SLACK_ICON: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
           SLACK_MESSAGE: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
           SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
