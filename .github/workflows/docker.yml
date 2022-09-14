@@ -15,7 +15,7 @@ jobs:
       - id: generate-matrix
         run: |
           sudo add-apt-repository ppa:deadsnakes/ppa
-          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python3-pip
+          sudo apt-get install --no-install-recommends -y git jq python${PYTHON_VERSION} python3-pip
           python${PYTHON_VERSION} -m pip install --upgrade pip
           python${PYTHON_VERSION} -m pip install tfrelease
           tfrelease=$(tfrelease -vMmL -t "hansohn/terraform:{tag}" | jq '.versions')
@@ -59,6 +59,7 @@ jobs:
         id: slack
         uses: rtCamp/action-slack-notify@v2
         env:
+          GITHUB_SHA_SHORT: $(git rev-parse --short HEAD)
           MSG_MINIMAL: true
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_ID }}
           SLACK_COLOR: ${{ job.status }}
@@ -66,6 +67,6 @@ jobs:
           SLACK_ICON: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
           # SLACK_MESSAGE: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
           SLACK_TITLE: ""
-          SLACK_MESSAGE: "${{ job.status }} ${{ github.event.pull_request.html_url || github.event.head_commit.url }} (${{ github.ref_name }}#$(git rev-parse --short "$GITHUB_SHA"))"
+          SLACK_MESSAGE: "${{ job.status }} ${{ github.event.pull_request.html_url || github.event.head_commit.url }} (${{ github.ref_name }}#${GITHUB_SHA_SHORT})"
           SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
