@@ -69,7 +69,6 @@ jobs:
           SLACK_FOOTER: ""
           SLACK_ICON: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
           SLACK_TITLE: ""
-          SLACK_TITLE: ""
           SLACK_MESSAGE: "${{ job.status }} ${{ github.event.pull_request.html_url || github.event.head_commit.url }} (${{ github.ref_name }}#${{ steps.vars.outputs.sha_short }})"
           SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
