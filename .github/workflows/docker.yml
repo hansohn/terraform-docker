@@ -82,10 +82,6 @@ jobs:
           push: ${{ (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule' }}
           tags: ${{ join(matrix.versions.tags, ',') }}
 
-  slack:
-    needs: docker
-    runs-on: ubuntu-latest
-    steps:
       - name: Get Short SHA
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
