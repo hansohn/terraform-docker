@@ -4,8 +4,13 @@ name: docker
 on:
   workflow_dispatch:
   push:
-    - branches
-    - pull_request
+    branches:
+      - '*'
+    pull_request:
+      types:
+        - opened
+        - reopened
+        - synchronize
     tags:
       - 'v?[0-9]+.[0-9]+.[0-9]+'
   schedule:
