@@ -1,0 +1,24 @@
+---
+name: slack
+
+on: push
+
+jobs:
+  slackNotification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Short SHA
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          MSG_MINIMAL: true
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_FOOTER: ""
+          SLACK_ICON: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+          SLACK_MESSAGE: "${{ job.status }} ${{ github.event.pull_request.html_url || github.event.head_commit.url }} (${{ github.ref_name }}#${{ steps.vars.outputs.sha_short }})"
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
