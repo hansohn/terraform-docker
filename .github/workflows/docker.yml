@@ -83,7 +83,9 @@ jobs:
           tags: ${{ join(matrix.versions.tags, ',') }}
 
   slack:
-    needs: docker
+    needs: 
+      - matrix
+      - docker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -108,14 +110,23 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
+      # - name: Slack Notification
+      #   uses: rtCamp/action-slack-notify@v2
+      #   env:
+      #     MSG_MINIMAL: true
+      #     SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_ID }}
+      #     SLACK_COLOR: ${{ job.status }}
+      #     SLACK_FOOTER: ""
+      #     SLACK_ICON: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+      #     SLACK_MESSAGE: "${{ job.status }} ${{ github.event.pull_request.html_url || github.event.head_commit.url }} (${{ github.ref_name }}#${{ steps.vars.outputs.sha_short }})"
+      #     SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          MSG_MINIMAL: true
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_ID }}
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_FOOTER: ""
-          SLACK_ICON: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
-          SLACK_MESSAGE: "${{ job.status }} ${{ github.event.pull_request.html_url || github.event.head_commit.url }} (${{ github.ref_name }}#${{ steps.vars.outputs.sha_short }})"
-          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        uses: Gamesight/slack-workflow-status@master
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          channel: ${{ secrets.SLACK_CHANNEL_ID }}
+          name: ${{ secrets.SLACK_USERNAME }}
+          icon_url:  "https://cdn-icons-png.flaticon.com/512/25/25231.png"
