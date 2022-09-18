@@ -36,6 +36,7 @@ jobs:
           PYTHON_VERSION: 3.9
 
   docker:
+    name: ${{ matrix.versions.version }}
     needs: matrix
     runs-on: ubuntu-latest
     strategy:
