@@ -91,37 +91,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Get latest tag
-        if: github.event_name == 'schedule'
-        id: latesttag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-        with:
-          fallback: ${{ github.event.repository.default_branch }}
-
-      - name: Checkout latest tag
-        if: github.event_name == 'schedule'
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.latesttag.outputs.tag }}
-
-      - name: Get Short SHA
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      # - name: Slack Notification
-      #   uses: rtCamp/action-slack-notify@v2
-      #   env:
-      #     MSG_MINIMAL: true
-      #     SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_ID }}
-      #     SLACK_COLOR: ${{ job.status }}
-      #     SLACK_FOOTER: ""
-      #     SLACK_ICON: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
-      #     SLACK_MESSAGE: "${{ job.status }} ${{ github.event.pull_request.html_url || github.event.head_commit.url }} (${{ github.ref_name }}#${{ steps.vars.outputs.sha_short }})"
-      #     SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Slack Notification
         uses: Gamesight/slack-workflow-status@master
