@@ -14,13 +14,13 @@ on:
     tags:
       - 'v?[0-9]+.[0-9]+.[0-9]+'
   schedule:
-    - cron: '0 7 * * 1'
+    - cron: '0 7 * * 1,3,5'
 
 jobs:
   matrix:
     runs-on: ubuntu-latest
     outputs:
-      version_matrix: ${{ steps.generate-matrix.outputs.tfrelease }}
+      versions: ${{ steps.generate-matrix.outputs.tfrelease }}
     steps:
       - name: Generate Matrix
         id: generate-matrix
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        versions: ${{ fromJSON(needs.matrix.outputs.version_matrix) }}
+        versions: ${{ fromJSON(needs.matrix.outputs.versions) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
