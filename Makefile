@@ -87,7 +87,7 @@ docker/push:
 	fi
 .PHONY: docker/push
 
-## Docker build and run image
+## Docker lint, build and run image
 docker: docker/lint docker/build docker/run
 .PHONY: docker
 
