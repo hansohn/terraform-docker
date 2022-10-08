@@ -17,6 +17,10 @@ REPO_NAME ?= $(shell basename $(CURDIR))
 #-------------------------------------------------------------------------------
 
 TERRAFORM_VERSION ?= latest
+TERRAGRUNT_VERSION ?= latest
+TERRAFORM_DOCS_VERSION ?= latest
+TFLINT_VERSION ?= latest
+TFSEC_VERSION ?= latest
 
 #-------------------------------------------------------------------------------
 # git
@@ -42,6 +46,11 @@ endif
 
 DOCKER_BUILD_PATH ?= debian
 DOCKER_BUILD_ARGS ?=
+DOCKER_BUILD_ARGS += --build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION)
+DOCKER_BUILD_ARGS += --build-arg TERRAGRUNT_VERSION=$(TERRAGRUNT_VERSION)
+DOCKER_BUILD_ARGS += --build-arg TERRAFORM_DOCS_VERSION=$(TERRAFORM_DOCS_VERSION)
+DOCKER_BUILD_ARGS += --build-arg TFLINT_VERSION=$(TFLINT_VERSION)
+DOCKER_BUILD_ARGS += --build-arg TFSEC_VERSION=$(TFSEC_VERSION)
 DOCKER_BUILD_ARGS += $(DOCKER_TAGS)
 
 DOCKER_PUSH_ARGS ?=
