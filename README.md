@@ -35,13 +35,21 @@ This docker image is intended for Terraform development and CI/CD use and includ
 ### Customization
 
 Tool versions are set to `latest` by default but can be explicitly defined by
-overriding the following build parameters:
+overriding the following build arguements:
 
 - TERRAFORM_VERSION=latest
 - TERRAGRUNT_VERSION=latest
 - TERRAFORM_DOCS_VERSION=latest
 - TFLINT_VERSION=latest
 - TFSEC_VERSION=latest
+
+```bash
+# example
+$ TERRAFORM_VERSION=0.15.5 make docker/build
+
+# example with console build output
+$ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
+```
 
 ### Usage
 
