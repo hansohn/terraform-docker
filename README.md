@@ -37,13 +37,11 @@ This docker image is intended for Terraform development and CI/CD use and includ
 Tool versions are set to `latest` by default but can be explicitly defined by
 overriding the following build parameters:
 
-```bash
-TERRAFORM_VERSION=latest
-TERRAGRUNT_VERSION=latest
-TERRAFORM_DOCS_VERSION=latest
-TFLINT_VERSION=latest
-TFSEC_VERSION=latest
-```
+- TERRAFORM_VERSION=latest
+- TERRAGRUNT_VERSION=latest
+- TERRAFORM_DOCS_VERSION=latest
+- TFLINT_VERSION=latest
+- TFSEC_VERSION=latest
 
 ### Usage
 
