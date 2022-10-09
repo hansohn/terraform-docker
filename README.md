@@ -26,7 +26,7 @@
 Welcome to our Terraform docker repo. We've built this image with Terraform
 development and CI/CD in mind. The image contains various popular utilities often
 used in Terraform development. By default our images target the latest versions of
-these utilities and are built and published to DockerHUb every Monday, Wednesday,
+these utilities and are built and published to Docker Hub every Monday, Wednesday,
 Friday.
 
 ### Whats Included
@@ -113,7 +113,7 @@ $ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
 
 #### Distros
 
-Currently we only build and publish Debian images to DockerHub. That being said
+Currently we only build and publish Debian images to Docker Hub. That being said
 we have also included Dockerfile configurations for both Alpine and Ubuntu
 distributions. The `DOCKER_BUILD_PATH` environment variable can be used to target
 either of these alternative distro builds.
