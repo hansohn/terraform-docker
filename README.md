@@ -25,9 +25,9 @@
 
 Welcome to my Terraform docker repo. I've built this image with Terraform
 development and CI/CD in mind. The image contains various popular utilities often
-used in Terraform development. By default this image targets the latest versions of
-these utilities and are built and published to Docker Hub every Monday, Wednesday,
-Friday.
+used in Terraform development. By default, this image targets the latest versions of
+these utilities and is built and published to Docker Hub every Monday, Wednesday,
+and Friday.
 
 ### Whats Included
 
@@ -54,12 +54,12 @@ hansohn/terraform:1.2           latest 1.2.x version release of Terraform
 hansohn/terraform:1.2.3         1.2.3 version of Terraform
 ```
 
-### :open_book: Usage
+### Usage
 
-Published images can be ran using the following syntax
+Published images can be run using the following syntax
 
 ```
-# run latest publsihed version
+# run latest published version
 $ docker run -it --rm hansohn/terraform:latest /bin/bash
 ```
 
@@ -70,8 +70,9 @@ Local images can be built and run using the following syntax
 make docker
 ```
 
-Additionally a Makefile has been included in this repo to assist with common development
-related functions. I've included the following make targets for convenience:
+Additionally, a Makefile has been included in this repo to assist with common
+development-related functions. I've included the following make targets for
+convenience:
 
 ```
 Available targets:
@@ -92,7 +93,7 @@ Available targets:
 
 #### Utilities
 
-I publish images with the latest versions of the included utilities. Alternatively
+I publish images with the latest versions of the included utilities. Alternatively,
 you can build a customized image and pin any of these utilities to a version that
 matches your specific needs. Versions can be pinned by defining any of the following
 environment variables with the desired version.
@@ -113,7 +114,7 @@ $ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
 
 #### Distros
 
-Currently I only build and publish Debian images to Docker Hub. That being said
+Currently, I only build and publish Debian images to Docker Hub. That being said
 I have also included Dockerfile configurations for both Alpine and Ubuntu
 distributions. The `DOCKER_BUILD_PATH` environment variable can be used to target
 either of these alternative distro builds.
