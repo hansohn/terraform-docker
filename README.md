@@ -23,16 +23,17 @@
 
 ### Description
 
-Welcome to our Terraform docker repo. We built this image with Terraform
+Welcome to our Terraform docker repo. We've built this image with Terraform
 development and CI/CD in mind. The image contains various popular utilities often
 used in Terraform development. By default our images target the latest versions of
-these utilities and are built and published every Monday, Wednesday, Friday.
+these utilities and are built and published to DockerHUb every Monday, Wednesday,
+Friday.
 
 ### Whats Included
 
 The following utilities are included in this image:
 
-- [terraform](https://github.com/hashicorp/terraform): an open-source infrastructure as code software tool that enables you to safely and predictably create, change, and improve infrastructure.
+- [terraform](https://github.com/hashicorp/terraform): an IAC software tool that enables you to safely and predictably create, change, and improve infrastructure.
 - [terragrunt](https://github.com/gruntwork-io/terragrunt): A thin wrapper for Terraform that provides extra tools for working with multiple Terraform modules.
 - [terraform-docs](https://github.com/terraform-docs/terraform-docs): Generate documentation from Terraform modules in various output formats
 - [tfint](https://github.com/terraform-linters/tflint): A Pluggable Terraform Linter
@@ -41,15 +42,16 @@ The following utilities are included in this image:
 
 ### Naming Convention
 
-Currently we are only publishing Debian images to DockerHub. Those images follow
-the following tag naming conventions.
+We've written a Terraform release metadata tool called [tfrelease](https://github.com/hansohn/tfrelease)
+that generates tags for our image releases. The tags follow the following naming
+convention.
 
 ```
 # tag formats
-hansohn/terraform:latest    latest release of Terraform
-hansohn/terraform:1         latest 1.x.x version release of Terraform
-hansohn/terraform:1.2       latest 1.2.x version release of Terraform
-hansohn/terraform:1.2.3     1.2.3 version of Terraform
+hansohn/terraform:latest        latest release of Terraform
+hansohn/terraform:1             latest 1.x.x version release of Terraform
+hansohn/terraform:1.2           latest 1.2.x version release of Terraform
+hansohn/terraform:1.2.3         1.2.3 version of Terraform
 ```
 
 ### Usage
@@ -68,7 +70,7 @@ Local images can be built and run using the following syntax
 make docker
 ```
 
-A Makefile has been included in this repo to assist with common development
+Additionally a Makefile has been included in this repo to assist with common development
 related functions. We've included the following make targets for convenience:
 
 ```
