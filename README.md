@@ -23,9 +23,9 @@
 
 ### Description
 
-Welcome to our Terraform docker repo. We've built this image with Terraform
+Welcome to my Terraform docker repo. I've built this image with Terraform
 development and CI/CD in mind. The image contains various popular utilities often
-used in Terraform development. By default our images target the latest versions of
+used in Terraform development. By default this image targets the latest versions of
 these utilities and are built and published to Docker Hub every Monday, Wednesday,
 Friday.
 
@@ -42,8 +42,8 @@ The following utilities are included in this image:
 
 ### Tags
 
-We've written a Terraform release metadata tool called [tfrelease](https://github.com/hansohn/tfrelease)
-that generates tags for our image releases. The tags follow the following naming
+I've written a Terraform release metadata tool called [tfrelease](https://github.com/hansohn/tfrelease)
+that generates tags for my image releases. The tags follow the following naming
 convention.
 
 ```
@@ -71,7 +71,7 @@ make docker
 ```
 
 Additionally a Makefile has been included in this repo to assist with common development
-related functions. We've included the following make targets for convenience:
+related functions. I've included the following make targets for convenience:
 
 ```
 Available targets:
@@ -92,10 +92,10 @@ Available targets:
 
 #### Utilities
 
-Even though we publish images with the latest versions of included utilities,
-you can custom build local images with pinned versions of those utilities to
-match your specific needs. Versions can be pinned by defining any of the following
-environment variables with the desired version:
+I publish images with the latest versions of the included utilities. Alternatively
+you can build a customized image and pin any of these utilities to a version that
+matches your specific needs. Versions can be pinned by defining any of the following
+environment variables with the desired version.
 
 - TERRAFORM_VERSION
 - TERRAGRUNT_VERSION
@@ -113,8 +113,8 @@ $ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
 
 #### Distros
 
-Currently we only build and publish Debian images to Docker Hub. That being said
-we have also included Dockerfile configurations for both Alpine and Ubuntu
+Currently I only build and publish Debian images to Docker Hub. That being said
+I have also included Dockerfile configurations for both Alpine and Ubuntu
 distributions. The `DOCKER_BUILD_PATH` environment variable can be used to target
 either of these alternative distro builds.
 
