@@ -23,7 +23,14 @@
 
 ### Description
 
-This docker image is intended for Terraform development and CI/CD use and includes the following tools:
+Welcome to our Terraform docker repo. We built this image with Terraform
+development and CI/CD in mind. The image contains various popular utilities often
+used in Terraform development. By default our images target the latest versions of
+these utilities and are built and published every Monday, Wednesday, Friday.
+
+### Whats Included
+
+The following utilities are included in this image:
 
 - [terraform](https://github.com/hashicorp/terraform)
 - [terragrunt](https://github.com/gruntwork-io/terragrunt)
@@ -32,28 +39,37 @@ This docker image is intended for Terraform development and CI/CD use and includ
 - [tfsec](https://github.com/aquasecurity/tfsec)
 - [aws-cli](https://github.com/aws/aws-cli)
 
-### Customization
+### Naming Convention
 
-Tool versions are set to `latest` by default but can be explicitly defined by
-overriding the following build arguements:
+Currently we are only publishing Debian images to DockerHub. Those images follow
+the following tag naming conventions.
 
-- TERRAFORM_VERSION=latest
-- TERRAGRUNT_VERSION=latest
-- TERRAFORM_DOCS_VERSION=latest
-- TFLINT_VERSION=latest
-- TFSEC_VERSION=latest
-
-```bash
-# example
-$ TERRAFORM_VERSION=0.15.5 make docker/build
-
-# example with console build output
-$ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
+```
+# tag formats
+hansohn/terraform:latest    latest release of Terraform
+hansohn/terraform:1         latest 1.x.x version release of Terraform
+hansohn/terraform:1.2       latest 1.2.x version release of Terraform
+hansohn/terraform:1.2.3     1.2.3 version of Terraform
 ```
 
 ### Usage
 
-A Makefile has been include with the following targets:
+Published images can be ran using the following syntax
+
+```
+# run latest publsihed version
+$ docker run -it --rm hansohn/terraform:latest /bin/bash
+```
+
+Local images can be built and run using the following syntax
+
+```
+# build and run local image
+make docker
+```
+
+A Makefile has been included in this repo to assist with common development
+related functions. We've included the following make targets for convenience:
 
 ```
 Available targets:
@@ -68,4 +84,39 @@ Available targets:
   help                                Help screen
   help/all                            Display help for all targets
   help/short                          This help short screen
+```
+
+### Customization
+
+#### Utilities
+
+Even though we publish images with the latest versions of included utilities,
+you can custom build local images with pinned versions of those utilities to
+match your specific needs. Versions can be pinned by defining any of the following
+environment variables with the desired version:
+
+- TERRAFORM_VERSION
+- TERRAGRUNT_VERSION
+- TERRAFORM_DOCS_VERSION
+- TFLINT_VERSION
+- TFSEC_VERSION
+
+```bash
+# example
+$ TERRAFORM_VERSION=0.15.5 make docker/build
+
+# example with logs pipped to console
+$ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
+```
+
+#### Distros
+
+Currently we only build and publish Debian images to DockerHub. That being said
+we have also included Dockerfile configurations for both Alpine and Ubuntu
+distributions. The `DOCKER_BUILD_PATH` environment variable can be used to target
+either of these alternative distro builds.
+
+```
+# example
+$ DOCKER_BUILD_PATH=ubuntu make docker
 ```
