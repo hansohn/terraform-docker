@@ -43,6 +43,7 @@ jobs:
       matrix:
         versions: ${{ fromJSON(needs.matrix.outputs.versions) }}
     steps:
+      
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -82,6 +83,15 @@ jobs:
           context: ./debian
           push: ${{ (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule' }}
           tags: ${{ join(matrix.versions.tags, ',') }}
+
+      - name: Docker Hub Description
+        if: (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule'
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: hansohn/terraform
+          short-description: ${{ github.event.repository.description }}
 
   slack:
     needs: 
