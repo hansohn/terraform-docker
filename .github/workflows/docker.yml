@@ -83,6 +83,12 @@ jobs:
           push: ${{ (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule' }}
           tags: ${{ join(matrix.versions.tags, ',') }}
 
+  dockerhub:
+    needs:
+      - matrix
+      - docker
+    run-on: ubuntu-latest
+    steps:
       - name: Docker Hub Description
         if: (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule'
         uses: peter-evans/dockerhub-description@v3
@@ -96,6 +102,7 @@ jobs:
     needs: 
       - matrix
       - docker
+      - dockerhub
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
