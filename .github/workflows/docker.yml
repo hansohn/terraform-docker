@@ -83,6 +83,12 @@ jobs:
           push: ${{ (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule' }}
           tags: ${{ join(matrix.versions.tags, ',') }}
 
+  dockerhub:
+    needs:
+      - matrix
+      - docker
+    runs-on: ubuntu-latest
+    steps:
       - name: Docker Hub Description
         if: (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule'
         uses: peter-evans/dockerhub-description@v3
@@ -93,9 +99,10 @@ jobs:
           short-description: ${{ github.event.repository.description }}
 
   slack:
-    needs: 
+    needs:
       - matrix
       - docker
+      - dockerhub
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -108,4 +115,4 @@ jobs:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK }}
           channel: ${{ secrets.SLACK_CHANNEL_ID }}
           name: ${{ secrets.SLACK_USERNAME }}
-          icon_url:  "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+          icon_url: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
