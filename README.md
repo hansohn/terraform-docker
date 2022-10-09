@@ -33,7 +33,7 @@ Friday.
 
 The following utilities are included in this image:
 
-- [terraform](https://github.com/hashicorp/terraform): A software tool that enables you to safely and predictably create, change, and improve infrastructure.
+- [terraform](https://github.com/hashicorp/terraform): Software tool that enables you to safely and predictably create, change, and improve infrastructure.
 - [terragrunt](https://github.com/gruntwork-io/terragrunt): A thin wrapper for Terraform that provides extra tools for working with multiple Terraform modules.
 - [terraform-docs](https://github.com/terraform-docs/terraform-docs): Generate documentation from Terraform modules in various output formats
 - [tfint](https://github.com/terraform-linters/tflint): A Pluggable Terraform Linter
