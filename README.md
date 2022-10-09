@@ -54,7 +54,7 @@ hansohn/terraform:1.2           latest 1.2.x version release of Terraform
 hansohn/terraform:1.2.3         1.2.3 version of Terraform
 ```
 
-### Usage
+### :open_book: Usage
 
 Published images can be ran using the following syntax
 
