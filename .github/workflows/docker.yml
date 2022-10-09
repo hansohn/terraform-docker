@@ -87,7 +87,7 @@ jobs:
     needs:
       - matrix
       - docker
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Docker Hub Description
         if: (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule'
@@ -99,7 +99,7 @@ jobs:
           short-description: ${{ github.event.repository.description }}
 
   slack:
-    needs: 
+    needs:
       - matrix
       - docker
       - dockerhub
@@ -115,4 +115,4 @@ jobs:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK }}
           channel: ${{ secrets.SLACK_CHANNEL_ID }}
           name: ${{ secrets.SLACK_USERNAME }}
-          icon_url:  "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+          icon_url: "https://cdn-icons-png.flaticon.com/512/25/25231.png"
