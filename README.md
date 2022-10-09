@@ -40,7 +40,7 @@ The following utilities are included in this image:
 - [tfsec](https://github.com/aquasecurity/tfsec): Security scanner for your Terraform code
 - [aws-cli](https://github.com/aws/aws-cli): Universal Command Line Interface for Amazon Web Services
 
-### Naming Convention
+### Tags
 
 We've written a Terraform release metadata tool called [tfrelease](https://github.com/hansohn/tfrelease)
 that generates tags for our image releases. The tags follow the following naming
