@@ -102,6 +102,11 @@ jobs:
           short-description: ${{ github.event.repository.description }}
 
   slack:
+    if: always()
+    needs:
+      - matrix
+      - docker
+      - dockerhub
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
