@@ -31,7 +31,7 @@ jobs:
           python${PYTHON_VERSION} -m pip install tfrelease
           tfrelease=$(tfrelease -vMmL -t "hansohn/terraform:{tag}" | jq '.versions')
           echo ${tfrelease}
-          echo ::set-output name=tfrelease::${tfrelease}
+          echo tfrelease=${tfrelease} >> $GITHUB_OUTPUT
         env:
           PYTHON_VERSION: 3.9
 
