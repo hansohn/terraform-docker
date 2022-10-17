@@ -31,7 +31,7 @@ jobs:
           python${PYTHON_VERSION} -m pip install tfrelease
           tfrelease=$(tfrelease -vMmL -t "hansohn/terraform:{tag}" | jq '.versions')
           echo ${tfrelease}
-          echo ::set-output name=tfrelease::${tfrelease}
+          echo tfrelease=${tfrelease} >> $GITHUB_OUTPUT
         env:
           PYTHON_VERSION: 3.9
 
@@ -84,6 +84,7 @@ jobs:
           tags: ${{ join(matrix.versions.tags, ',') }}
 
   dockerhub:
+    if: (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule'
     needs:
       - matrix
       - docker
@@ -93,7 +94,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Docker Hub Description
-        if: (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule'
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -102,6 +102,7 @@ jobs:
           short-description: ${{ github.event.repository.description }}
 
   slack:
+    if: always()
     needs:
       - matrix
       - docker
