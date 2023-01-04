@@ -16,9 +16,10 @@ REPO_NAME ?= $(shell basename $(CURDIR))
 # terraform
 #-------------------------------------------------------------------------------
 
+TERRAFORM_DOCS_VERSION ?= latest
 TERRAFORM_VERSION ?= latest
 TERRAGRUNT_VERSION ?= latest
-TERRAFORM_DOCS_VERSION ?= latest
+TFGET_VERSION ?= latest
 TFLINT_VERSION ?= latest
 TFSEC_VERSION ?= latest
 
@@ -53,6 +54,11 @@ DOCKER_BUILD_ARGS += --build-arg TFLINT_VERSION=$(TFLINT_VERSION)
 DOCKER_BUILD_ARGS += --build-arg TFSEC_VERSION=$(TFSEC_VERSION)
 DOCKER_BUILD_ARGS += $(DOCKER_TAGS)
 
+DOCKER_RUN_ARGS ?=
+DOCKER_RUN_ARGS += --interactive
+DOCKER_RUN_ARGS += --tty
+DOCKER_RUN_ARGS += --rm
+
 DOCKER_PUSH_ARGS ?=
 DOCKER_PUSH_ARGS += --all-tags
 
@@ -80,7 +86,7 @@ docker/build:
 docker/run:
 	-@if docker stats --no-stream > /dev/null 2>&1; then \
 		echo "[INFO] Running '$(DOCKER_USER)/$(DOCKER_REPO)' docker image"; \
-		docker run -it --rm "$(DOCKER_TAG_BASE):$(GIT_HASH)" bash; \
+		docker run $(DOCKER_RUN_ARGS) "$(DOCKER_TAG_BASE):$(GIT_HASH)" bash; \
 	else \
 		echo "[ERROR] Docker 'run' failed. Docker daemon is not Running."; \
 	fi
