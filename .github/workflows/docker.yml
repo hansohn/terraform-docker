@@ -84,7 +84,7 @@ jobs:
           tags: ${{ join(matrix.versions.tags, ',') }}
 
   dockerhub:
-    if: (github.event_name == 'push' && github.ref == 'refs/tags/*') || github.event_name == 'schedule'
+    if: (github.event_name == 'push' && github.ref_type == 'tag') || github.event_name == 'schedule'
     needs:
       - matrix
       - docker
