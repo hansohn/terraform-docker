@@ -20,18 +20,18 @@ jobs:
   matrix:
     runs-on: ubuntu-latest
     outputs:
-      versions: ${{ steps.generate-matrix.outputs.tfrelease }}
+      versions: ${{ steps.generate-matrix.outputs.tfver }}
     steps:
       - name: Generate Matrix
         id: generate-matrix
         run: |
           sudo add-apt-repository ppa:deadsnakes/ppa
-          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python3-pip
+          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils python3-pip
           python${PYTHON_VERSION} -m pip install --upgrade pip
-          python${PYTHON_VERSION} -m pip install tfrelease
-          tfrelease=$(tfrelease -vMmL -t "hansohn/terraform:{tag}" | jq '.versions')
-          echo ${tfrelease}
-          echo tfrelease=${tfrelease} >> $GITHUB_OUTPUT
+          python${PYTHON_VERSION} -m pip install tfver
+          tfver=$(tfver -vMmL -t "hansohn/terraform:{tag}" | jq '.versions')
+          echo ${tfver}
+          echo tfver=${tfver} >> $GITHUB_OUTPUT
         env:
           PYTHON_VERSION: 3.9
 

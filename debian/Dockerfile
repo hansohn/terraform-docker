@@ -3,13 +3,10 @@ ARG DEBIAN_VERSION=stable-slim
 
 # builder
 FROM debian:${DEBIAN_VERSION} as builder
-ARG TFSWITCH_VERSION=latest
-ARG TFSWITCH_TERRAFORM_VERSIONS=
-ARG TFENV_VERSION=latest
-ARG TFENV_TERRAFORM_VERSIONS=
 ARG TERRAFORM_DOCS_VERSION=latest
 ARG TERRAFORM_VERSION=latest
 ARG TERRAGRUNT_VERSION=latest
+ARG TFGET_VERSION=latest
 ARG TFLINT_VERSION=latest
 ARG TFSEC_VERSION=latest
 COPY dotfiles/. /root/
@@ -22,30 +19,13 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
       libc6 \
       unzip
 
-# tfenv
-RUN /bin/bash -c 'if [[ "${TFENV_VERSION}" == "latest" ]]; then TFENV_VERSION=$(${CURL} "https://api.github.com/repos/tfutils/tfenv/releases/latest" | jq -r .tag_name  | sed -e "s:^v::"); fi \
-      && ${CURL} https://github.com/tfutils/tfenv/archive/refs/tags/v${TFENV_VERSION}.tar.gz -o tfenv.tar.gz \
-      && tar -xzf tfenv.tar.gz \
-      && mv tfenv-${TFENV_VERSION} $HOME/.tfenv \
-      && chmod +x $HOME/.tfenv/bin/tfenv \
-      && $HOME/.tfenv/bin/tfenv --version'
-
-# tfswitch
-RUN /bin/bash -c 'if [[ "${TFSWITCH_VERSION}" == "latest" ]]; then TFSWITCH_VERSION=$(${CURL} "https://api.github.com/repos/warrensbox/terraform-switcher/releases/latest" | jq -r .tag_name  | sed -e "s:^v::"); fi \
-      && ${CURL} https://github.com/warrensbox/terraform-switcher/releases/download/${TFSWITCH_VERSION}/terraform-switcher_${TFSWITCH_VERSION}_linux_amd64.tar.gz -o terraform-switcher.tar.gz \
-      && tar -xzf terraform-switcher.tar.gz \
-      && mv tfswitch /usr/local/bin/ \
-      && chown root:root /usr/local/bin/tfswitch \
-      && chmod +x /usr/local/bin/tfswitch \
-      && tfswitch --version'
-
 # terraform
-RUN /bin/bash -c 'if [[ "${TERRAFORM_VERSION}" == "latest" ]]; then TERRAFORM_VERSION=$(${CURL} "https://api.github.com/repos/hashicorp/terraform/releases/latest" | jq -r .tag_name  | sed -e "s:^v::"); fi \
-      && ${CURL} https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip \
-      && unzip terraform.zip \
-      && mv terraform /usr/local/bin/ \
-      && chmod +x /usr/local/bin/terraform \
-      && mkdir -p /root/.terraform.d/plugin-cache \
+RUN /bin/bash -c 'if [[ "${TFGET_VERSION}" == "latest" ]]; then TFGET_VERSION=$(${CURL} "https://api.github.com/repos/hansohn/tfget/releases/latest" | jq -r .tag_name  | sed -e "s:^v::"); fi \
+      && ${CURL} https://github.com/hansohn/tfget/releases/download/${TFGET_VERSION}/tfget-${TFGET_VERSION}.tar.gz -o tfget-${TFGET_VERSION}.tar.gz \
+      && tar -xzf tfget-${TFGET_VERSION}.tar.gz \
+      && mv tfget /usr/local/bin/ \
+      && chmod +x /usr/local/bin/tfget \
+      && tfget ${TERRAFORM_VERSION} \
       && terraform --version'
 
 # terragrunt
@@ -94,8 +74,8 @@ FROM debian:${DEBIAN_VERSION} as main
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install --no-install-recommends -y \
       bash \
-      ca-certificates \
       curl \
+      ca-certificates \
       git \
       groff \
       jq \
@@ -105,13 +85,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
       && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /aws-cli-bin/ /usr/local/bin/
 COPY --from=builder /root/.terraform.d/. /root/.terraform.d/
-COPY --from=builder /root/.tfenv/. /root/.tfenv/
 COPY --from=builder /root/.tflint.d/. /root/.tflint.d/
 COPY --from=builder /root/.tflint.hcl /root/
 COPY --from=builder /usr/local/aws-cli/ /usr/local/aws-cli/
-COPY --from=builder /usr/local/bin/terra* /usr/local/bin/
-COPY --from=builder /usr/local/bin/tf* /usr/local/bin/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
+RUN /bin/bash -c 'terraform --version'
 RUN echo "complete -C /usr/local/bin/aws_completer aws" >> /root/.bashrc
-RUN echo "export PATH=\"$PATH:$HOME/.tfenv/bin\"" >> /root/.bashrc
 
 ENTRYPOINT []
