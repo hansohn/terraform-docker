@@ -1,6 +1,6 @@
 <div align="center">
   <h3>terraform-docker</h3>
-  <p>Terraform Docker images</p>
+  <p>Terraform Docker image</p>
   <p>
     <!-- Build Status -->
     <a href="https://actions-badge.atrox.dev/hansohn/terraform-docker/goto?ref=main">
@@ -23,7 +23,7 @@
 
 ### Description
 
-Welcome to my Terraform docker repo. I've built this image with Terraform
+Welcome to my Terraform Docker repo. I've built this image with Terraform
 development and CI/CD in mind. The image contains various popular utilities often
 used in Terraform development. By default, this image targets the latest versions of
 these utilities and is built and published to Docker Hub every Monday, Wednesday,
@@ -38,13 +38,12 @@ The following utilities are included in this image:
 - [terraform-docs](https://github.com/terraform-docs/terraform-docs): Generate documentation from Terraform modules in various output formats
 - [tfint](https://github.com/terraform-linters/tflint): A Pluggable Terraform Linter
 - [tfsec](https://github.com/aquasecurity/tfsec): Security scanner for your Terraform code
-- [aws-cli](https://github.com/aws/aws-cli): Universal Command Line Interface for Amazon Web Services
 
 ### Tags
 
-I've written a Terraform release metadata tool called [tfrelease](https://github.com/hansohn/tfrelease)
-that generates tags for my image releases. The tags follow the following naming
-convention.
+Docker images are tagged based on the version of Terraform they include. Tag
+format adheres to the following naming convention provided by the [tfver](https://github.com/hansohn/tfver)
+utility.
 
 ```
 # tag formats
@@ -60,7 +59,7 @@ Published images can be run using the following syntax
 
 ```
 # run latest published version
-$ docker run -it --rm hansohn/terraform:latest /bin/bash
+$ docker run -it --rm hansohn/terraform-digitalocean:latest /bin/bash
 ```
 
 Local images can be built and run using the following syntax
@@ -114,10 +113,10 @@ $ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
 
 #### Distros
 
-Currently, I only build and publish Debian images to Docker Hub. That being said
-I have also included Dockerfile configurations for both Alpine and Ubuntu
-distributions. The `DOCKER_BUILD_PATH` environment variable can be used to target
-either of these alternative distro builds.
+Currently, only Debian images are built and published to Docker Hub. Dockerfiles
+for both Alpine and Ubuntu distributions have also been included and can be built
+ad-hoc by setting the `DOCKER_BUILD_PATH` environment variable to target either
+of these alternative distro builds.
 
 ```
 # example

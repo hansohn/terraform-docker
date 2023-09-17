@@ -49,24 +49,14 @@ RUN /bin/bash -c 'if [[ "${TFLINT_VERSION}" == "latest" ]]; then TFLINT_VERSION=
       && unzip tflint.zip \
       && mv tflint /usr/local/bin/ \
       && chmod +x /usr/local/bin/tflint \
-      && TFLINT_AWS_VERSION=$(${CURL} "https://api.github.com/repos/terraform-linters/tflint-ruleset-aws/releases/latest" | jq -r .tag_name | sed -e "s:^v::") \
-      && sed -ie "s:TFLINT_AWS_VERSION:$TFLINT_AWS_VERSION:" /root/.tflint.hcl \
-      && GITHUB_TOKEN=${GITHUB_TOKEN:-$(awk "'"c&&!--c;/github.com/{c=2}"'" /root/.netrc | awk "'"{print $2;exit}"'")} \
       && tflint --version \
       && tflint --init'
 
 # tfsec
-RUN bin/bash -c 'if [[ "${TFSEC_VERSION}" == "latest" ]]; then TFSEC_VERSION=$(${CURL} "https://api.github.com/repos/aquasecurity/tfsec/releases/latest" | jq -r .tag_name); fi \
+RUN /bin/bash -c 'if [[ "${TFSEC_VERSION}" == "latest" ]]; then TFSEC_VERSION=$(${CURL} "https://api.github.com/repos/aquasecurity/tfsec/releases/latest" | jq -r .tag_name); fi \
       && ${CURL} https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-amd64 -o /usr/local/bin/tfsec \
       && chmod +x /usr/local/bin/tfsec \
       && tfsec --version'
-
-# awscli
-ADD https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip /tmp/awscliv2.zip
-RUN /bin/bash -c 'cd /tmp \
-      && unzip awscliv2.zip \
-      && ./aws/install --bin-dir /aws-cli-bin/ \
-      && /aws-cli-bin/aws --version'
 
 
 # main
@@ -77,19 +67,13 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
       curl \
       ca-certificates \
       git \
-      groff \
       jq \
       unzip \
       vim \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /aws-cli-bin/ /usr/local/bin/
 COPY --from=builder /root/.terraform.d/. /root/.terraform.d/
-COPY --from=builder /root/.tflint.d/. /root/.tflint.d/
-COPY --from=builder /root/.tflint.hcl /root/
-COPY --from=builder /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 RUN /bin/bash -c 'terraform --version'
-RUN echo "complete -C /usr/local/bin/aws_completer aws" >> /root/.bashrc
 
 ENTRYPOINT []
