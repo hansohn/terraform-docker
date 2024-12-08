@@ -2,7 +2,7 @@ ARG UBUNTU_VERSION=latest
 
 
 # builder
-FROM ubuntu:${UBUNTU_VERSION} as builder
+FROM ubuntu:${UBUNTU_VERSION} AS builder
 ARG TERRAFORM_DOCS_VERSION=latest
 ARG TERRAFORM_VERSION=latest
 ARG TERRAGRUNT_VERSION=latest
