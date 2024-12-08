@@ -2,7 +2,7 @@ ARG DEBIAN_VERSION=stable-slim
 
 
 # builder
-FROM debian:${DEBIAN_VERSION} as builder
+FROM debian:${DEBIAN_VERSION} AS builder
 ARG TERRAFORM_DOCS_VERSION=latest
 ARG TERRAFORM_VERSION=latest
 ARG TERRAGRUNT_VERSION=latest

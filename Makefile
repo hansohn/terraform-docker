@@ -45,6 +45,7 @@ DOCKER_BUILD_ARGS += --build-arg TERRAGRUNT_VERSION=$(TERRAGRUNT_VERSION)
 DOCKER_BUILD_ARGS += --build-arg TFGET_VERSION=$(TFGET_VERSION)
 DOCKER_BUILD_ARGS += --build-arg TFLINT_VERSION=$(TFLINT_VERSION)
 DOCKER_BUILD_ARGS += --build-arg TFSEC_VERSION=$(TFSEC_VERSION)
+DOCKER_BUILD_ARGS += --platform=linux/amd64,linux/arm64
 DOCKER_BUILD_ARGS += $(DOCKER_TAGS)
 
 DOCKER_RUN_ARGS ?=
@@ -54,6 +55,7 @@ DOCKER_RUN_ARGS += --rm
 
 DOCKER_PUSH_ARGS ?=
 DOCKER_PUSH_ARGS += --all-tags
+DOCKER_PUSH_ARGS += --platform=linux/amd64,linux/arm64
 
 ## Lint Dockerfile
 docker/lint:
@@ -69,7 +71,7 @@ docker/lint:
 docker/build:
 	-@if docker info > /dev/null 2>&1; then \
 		echo "[INFO] Building '$(DOCKER_USER)/$(DOCKER_REPO)' docker image."; \
-		docker build $(DOCKER_BUILD_ARGS) $(DOCKER_BUILD_PATH)/; \
+		docker buildx build $(DOCKER_BUILD_ARGS) $(DOCKER_BUILD_PATH)/; \
 	else \
 		echo "[ERROR] Docker 'build' failed. Docker daemon is not Running."; \
 	fi
