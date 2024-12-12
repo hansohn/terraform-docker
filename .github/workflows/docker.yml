@@ -23,6 +23,9 @@ jobs:
     outputs:
       versions: ${{ steps.generate-matrix.outputs.tfver }}
     steps:
+      - name: Set DOCKER_REPO env
+        run: echo "DOCKER_REPO=${GITHUB_REPOSITORY%-docker}" >> $GITHUB_ENV
+
       - name: Generate Matrix
         id: generate-matrix
         run: |
@@ -30,7 +33,7 @@ jobs:
           sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils python3-pip
           python${PYTHON_VERSION} -m pip install --upgrade pip
           python${PYTHON_VERSION} -m pip install tfver
-          tfver=$(tfver -vMmL -t "hansohn/terraform-aws:{tag}" | jq '.versions')
+          tfver=$(tfver -vMmL -t "${DOCKER_REPO}:{tag}" | jq '.versions')
           echo ${tfver}
           echo tfver=${tfver} >> $GITHUB_OUTPUT
 
@@ -159,12 +162,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set DOCKER_REPO env
+        run: echo "DOCKER_REPO=${GITHUB_REPOSITORY%-docker}" >> $GITHUB_ENV
+
       - name: Update dockerHub description
         uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: hansohn/terraform-aws
+          repository: ${{ env.DOCKER_REPO }}
           short-description: ${{ github.event.repository.description }}
 
   slack:
