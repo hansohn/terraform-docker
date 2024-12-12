@@ -68,6 +68,7 @@ RUN apk add --update --no-cache \
     unzip \
     vim
 COPY --from=builder /root/.terraform.d/. /root/.terraform.d/
+COPY --from=builder /root/.terraformrc /root/.terraformrc
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 RUN /bin/bash -c 'terraform --version'
 

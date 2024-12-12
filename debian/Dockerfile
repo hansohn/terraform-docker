@@ -73,6 +73,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /root/.terraform.d/. /root/.terraform.d/
+COPY --from=builder /root/.terraformrc /root/.terraformrc
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 RUN /bin/bash -c 'terraform --version'
 
