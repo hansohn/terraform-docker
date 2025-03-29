@@ -14,7 +14,7 @@ on:
 
 env:
   BUILD_CONTEXT: './debian'
-  PYTHON_VERSION: 3.11
+  PYTHON_VERSION: 3.12
 
 jobs:
   matrix:
@@ -26,13 +26,15 @@ jobs:
       - name: Set DOCKER_REPO env
         run: echo "DOCKER_REPO=${GITHUB_REPOSITORY%-docker}" >> $GITHUB_ENV
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "${{ env.PYTHON_VERSION }}"
+
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          sudo add-apt-repository ppa:deadsnakes/ppa
-          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils python3-pip
-          python${PYTHON_VERSION} -m pip install --upgrade pip
-          python${PYTHON_VERSION} -m pip install tfver
+          python -m pip install --break-system-packages tfver
           tfver=$(tfver -vMmL -t "${DOCKER_REPO}:{tag}" | jq '.versions')
           echo ${tfver}
           echo tfver=${tfver} >> $GITHUB_OUTPUT
