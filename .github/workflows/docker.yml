@@ -26,14 +26,15 @@ jobs:
       - name: Set DOCKER_REPO env
         run: echo "DOCKER_REPO=${GITHUB_REPOSITORY%-docker}" >> $GITHUB_ENV
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 'pypy3.12'
+
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          export DEBIAN_FRONTEND=noninteractive
-          sudo add-apt-repository ppa:deadsnakes/ppa
-          apt update
-          sudo apt-get install --no-install-recommends -y jq python${PYTHON_VERSION} python3-pip
-          python${PYTHON_VERSION} -m pip install --break-system-packages tfver
+          python -m pip install --break-system-packages tfver
           tfver=$(tfver -vMmL -t "${DOCKER_REPO}:{tag}" | jq '.versions')
           echo ${tfver}
           echo tfver=${tfver} >> $GITHUB_OUTPUT
