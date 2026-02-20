@@ -1,8 +1,9 @@
-ARG DEBIAN_VERSION=stable-slim
+ARG DEBIAN_VERSION=bookworm-slim
 
 
 # builder
 FROM debian:${DEBIAN_VERSION} AS builder
+ARG DEBIAN_FRONTEND=noninteractive
 ARG TERRAFORM_DOCS_VERSION=latest
 ARG TERRAFORM_VERSION=latest
 ARG TERRAGRUNT_VERSION=latest
