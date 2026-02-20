@@ -21,7 +21,7 @@ permissions:
   packages: write
 
 env:
-  BUILD_CONTEXT: './debian'
+  BUILD_CONTEXT: './docker/bookworm-slim'
   DOCKER_PLATFORMS: 'linux/amd64,linux/arm64'
   PYTHON_VERSION: 3.12
 
@@ -40,7 +40,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "${{ env.PYTHON_VERSION }}"
-          cache: 'pip'
 
       - name: Generate Matrix
         id: generate-matrix

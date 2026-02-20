@@ -109,7 +109,7 @@ Local images can be built and run using the following syntax:
 
 ```bash
 # build and run local image
-make docker
+make
 ```
 
 Additionally, a Makefile has been included in this repo to assist with common
@@ -119,11 +119,11 @@ convenience:
 ```
 Available targets:
 
-  check-docker                        Check if Docker daemon is running
   clean                               Clean everything
-  clean/docker                        Clean docker build images
-  docker                              Docker lint, build and run image
+  dev/up                              Initialize development environment
   docker/build                        Docker build image
+  docker/check                        Check if Docker daemon is running
+  docker/clean                        Docker clean build images
   docker/lint                         Lint Dockerfile
   docker/push                         Docker push image
   docker/run                          Docker run image
@@ -183,6 +183,7 @@ environment variables with the desired version.
 - TERRAFORM_DOCS_VERSION
 - TFLINT_VERSION
 - TFSEC_VERSION
+- TFGET_VERSION
 
 ```bash
 # example
@@ -196,12 +197,15 @@ DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
 
 Currently, only Debian images are built and published to Docker Hub. Dockerfiles
 for both Alpine and Ubuntu distributions have also been included and can be built
-ad-hoc by setting the `DOCKER_BUILD_PATH` environment variable to target either
+ad-hoc by setting the `DISTRO` environment variable to target either
 of these alternative distro builds.
 
 ```bash
-# example
-DOCKER_BUILD_PATH=ubuntu make docker
+# build ubuntu (noble) image
+DISTRO=noble make docker/build
+
+# build alpine image
+DISTRO=alpine make docker/build
 ```
 
 ## Build & Refresh Schedule
