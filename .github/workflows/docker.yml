@@ -21,7 +21,7 @@ permissions:
   packages: write
 
 env:
-  BUILD_CONTEXT: './debian'
+  BUILD_CONTEXT: './docker/bookworm-slim'
   DOCKER_PLATFORMS: 'linux/amd64,linux/arm64'
   PYTHON_VERSION: 3.12
 
