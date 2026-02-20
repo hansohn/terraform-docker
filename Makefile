@@ -1,7 +1,7 @@
 MAKEFLAGS += --warn-undefined-variables
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
-.DEFAULT_GOAL := dev
+.DEFAULT_GOAL := dev/up
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
@@ -118,9 +118,6 @@ docker/clean: docker/check
 .PHONY: docker/clean
 
 ## Initialize development environment
-dev: dev/up
-.PHONY: dev
-
 dev/up: docker/lint docker/build docker/run
 .PHONY: dev/up
 
