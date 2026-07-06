@@ -26,6 +26,7 @@
 </div>
 
 ## Table of Contents
+
 - [Description](#description)
 - [What's Included](#whats-included)
 - [Prerequisites](#prerequisites)
@@ -95,6 +96,7 @@ ships provenance attestations and an SBOM bound to that digest.
 ## Platform Support
 
 This image supports multiple platforms:
+
 - `linux/amd64` (x86_64)
 - `linux/arm64` (ARM64/Apple Silicon)
 
@@ -124,7 +126,7 @@ convenience:
 Available targets:
 
   clean                               Clean everything
-  dev                                  Initialize development environment
+  dev                                 Initialize development environment
   docker/build                        Docker build image
   docker/check                        Check if Docker daemon is running
   docker/clean                        Docker clean build images
@@ -199,6 +201,7 @@ TERRAFORM_VERSION=1.2.3 make docker/build
 ## Build & Refresh Schedule
 
 Images are automatically:
+
 - **Built and linted** on every push (multi-platform, without publishing)
 - **Published** when a version tag is pushed
 - **Refreshed** every Monday at 7am UTC to pick up the latest base-image security patches
