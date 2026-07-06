@@ -62,8 +62,8 @@ The following utilities are included in this image:
 ## Prerequisites
 
 - Docker 20.10 or later
-- Docker Buildx (for multi-platform builds)
-- `curl` and `jq` (used by the Makefile to resolve the latest Terraform version)
+- Docker Buildx with BuildKit (required for multi-platform builds and the
+  automatic platform args the Dockerfile relies on)
 
 ## Quick Start
 
@@ -178,10 +178,9 @@ docker run -it --rm -v $(pwd):/src -w /src \
 
 ### Utilities
 
-I publish images with the latest versions of the included utilities. Alternatively,
-you can build a customized image and pin any of these utilities to a version that
-matches your specific needs. Versions can be pinned by defining any of the following
-environment variables with the desired version.
+Utility versions are pinned in the [Dockerfile](Dockerfile) and kept current
+through automated dependency-update PRs. For a local build you can override any
+of them on the command line to target a specific version:
 
 - TERRAFORM_VERSION
 - TERRAGRUNT_VERSION
@@ -190,25 +189,27 @@ environment variables with the desired version.
 - TRIVY_VERSION
 
 ```bash
-# example
-TERRAFORM_VERSION=0.15.5 make docker/build
-
-# example with logs piped to console
-DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
+# build against a specific Terraform version
+TERRAFORM_VERSION=1.2.3 make docker/build
 ```
+
+> **Note:** Builds require BuildKit (the default in modern Docker). The Dockerfile
+> uses BuildKit's automatic `TARGETARCH`/`BUILDARCH` args, so `DOCKER_BUILDKIT=0`
+> is not supported.
 
 ## Build & Refresh Schedule
 
 Images are automatically:
-- **Built** when new tags are pushed
-- **Refreshed** every Monday, Wednesday, and Friday at 7am UTC to include latest security patches
+- **Built and linted** on every push (multi-platform, without publishing)
+- **Published** when a version tag is pushed
+- **Refreshed** every Monday, Wednesday, and Friday at 7am UTC to pick up the latest base-image security patches
 
-This ensures all images stay up-to-date with the latest base image security updates.
+This ensures published images stay up-to-date with the latest base image security updates.
 
 ## Security
 
 - Images include provenance attestations and SBOM (Software Bill of Materials)
-- All images are scanned during build
+- Published images are scanned for vulnerabilities with Trivy
 - Security vulnerabilities? See our [Security Policy](.github/SECURITY.md)
 
 ## Contributing
