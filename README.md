@@ -44,9 +44,10 @@
 
 Welcome to my Terraform Docker repo. I've built this image with Terraform
 development and CI/CD in mind. The image contains various popular utilities often
-used in Terraform development. By default, this image targets the latest versions of
-these utilities and is built and published to Docker Hub every Monday, Wednesday,
-and Friday.
+used in Terraform development. Utility versions are pinned in the Dockerfile and
+kept current through dependency-update PRs; the image is rebuilt and published to
+Docker Hub every Monday, Wednesday, and Friday to pick up base-image security
+patches.
 
 ## What's Included
 
@@ -56,12 +57,13 @@ The following utilities are included in this image:
 - [terragrunt](https://github.com/gruntwork-io/terragrunt): A thin wrapper for Terraform that provides extra tools for working with multiple Terraform modules
 - [terraform-docs](https://github.com/terraform-docs/terraform-docs): Generate documentation from Terraform modules in various output formats
 - [tflint](https://github.com/terraform-linters/tflint): A Pluggable Terraform Linter
-- [tfsec](https://github.com/aquasecurity/tfsec): Security scanner for your Terraform code
+- [trivy](https://github.com/aquasecurity/trivy): Security scanner for your Terraform code
 
 ## Prerequisites
 
 - Docker 20.10 or later
 - Docker Buildx (for multi-platform builds)
+- `curl` and `jq` (used by the Makefile to resolve the latest Terraform version)
 
 ## Quick Start
 
@@ -76,17 +78,20 @@ docker run -it --rm -v $(pwd):/workspace -w /workspace hansohn/terraform:latest 
 
 ## Tags
 
-Docker images are tagged based on the version of Terraform they include. Tag
-format adheres to the following naming convention provided by the [tfver](https://github.com/hansohn/tfver)
-utility.
+Docker images are tagged based on the pinned version of Terraform they include.
+A single Terraform version is published at a time (the version pinned in the
+Dockerfile), and it receives the full set of tags below:
 
 ```
-# tag formats
-hansohn/terraform:latest        latest release of Terraform
-hansohn/terraform:1             latest 1.x.x version release of Terraform
-hansohn/terraform:1.2           latest 1.2.x version release of Terraform
-hansohn/terraform:1.2.3         1.2.3 version of Terraform
+# tag formats (for a pinned Terraform version of e.g. 1.15.7)
+hansohn/terraform:latest        the currently published release
+hansohn/terraform:1             the 1.x.x line
+hansohn/terraform:1.15          the 1.15.x line
+hansohn/terraform:1.15.7        the exact version
 ```
+
+For reproducibility, pin by digest (`hansohn/terraform@sha256:...`); every image
+ships provenance attestations and an SBOM bound to that digest.
 
 ## Platform Support
 
@@ -120,7 +125,7 @@ convenience:
 Available targets:
 
   clean                               Clean everything
-  dev/up                              Initialize development environment
+  dev                                  Initialize development environment
   docker/build                        Docker build image
   docker/check                        Check if Docker daemon is running
   docker/clean                        Docker clean build images
@@ -159,7 +164,7 @@ docker run -it --rm -v $(pwd):/docs -w /docs \
 
 ```bash
 docker run -it --rm -v $(pwd):/src -w /src \
-  hansohn/terraform:latest tfsec .
+  hansohn/terraform:latest trivy config .
 ```
 
 ### Run Linter
@@ -182,8 +187,7 @@ environment variables with the desired version.
 - TERRAGRUNT_VERSION
 - TERRAFORM_DOCS_VERSION
 - TFLINT_VERSION
-- TFSEC_VERSION
-- TFGET_VERSION
+- TRIVY_VERSION
 
 ```bash
 # example
@@ -191,21 +195,6 @@ TERRAFORM_VERSION=0.15.5 make docker/build
 
 # example with logs piped to console
 DOCKER_BUILDKIT=0 TERRAFORM_VERSION=0.15.5 make docker/build
-```
-
-### Distros
-
-Currently, only Debian images are built and published to Docker Hub. Dockerfiles
-for both Alpine and Ubuntu distributions have also been included and can be built
-ad-hoc by setting the `DISTRO` environment variable to target either
-of these alternative distro builds.
-
-```bash
-# build ubuntu (noble) image
-DISTRO=noble make docker/build
-
-# build alpine image
-DISTRO=alpine make docker/build
 ```
 
 ## Build & Refresh Schedule
