@@ -32,6 +32,7 @@ Before you begin contributing, please:
 - [Docker](https://docs.docker.com/get-docker/) installed and running
 - [Make](https://www.gnu.org/software/make/) installed
 - [Git](https://git-scm.com/) for version control
+- `curl` and `jq` (used by the Makefile to resolve the latest Terraform version)
 
 ### Local Development
 
@@ -139,7 +140,7 @@ Before submitting a PR, ensure:
    terragrunt --version
    terraform-docs --version
    tflint --version
-   tfsec --version
+   trivy --version
    ```
 
 4. **Check for security vulnerabilities** (if possible)
@@ -148,8 +149,10 @@ Before submitting a PR, ensure:
 
 All pull requests automatically run:
 - Dockerfile linting
-- Multi-platform builds (linux/amd64, linux/arm64)
-- Security scans with provenance and SBOM generation
+- Multi-platform builds (linux/amd64, linux/arm64), with provenance attestations and SBOM generation
+
+Published images (on tagged releases and scheduled refreshes) additionally get:
+- A Trivy vulnerability scan of the pushed image
 
 ## Pull Request Process
 

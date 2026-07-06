@@ -1,7 +1,7 @@
 MAKEFLAGS += --warn-undefined-variables
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
-.DEFAULT_GOAL := dev/up
+.DEFAULT_GOAL := dev
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
@@ -20,26 +20,33 @@ DOCKER_USER ?= hansohn
 DOCKER_REPO ?= terraform
 DOCKER_TAG_BASE ?= $(DOCKER_USER)/$(DOCKER_REPO)
 
-DISTRO ?= bookworm-slim
-DOCKER_BUILD_PATH ?= ./docker/$(DISTRO)
-DOCKER_BUILD_CACHE_PATH ?= /tmp/.buildx-cache/$(REPO_NAME)/$(DISTRO)
+DOCKER_BUILD_PATH ?= .
+DOCKER_BUILD_CACHE_PATH ?= /tmp/.buildx-cache/$(REPO_NAME)
 
-TERRAFORM_DOCS_VERSION ?= latest
-TERRAFORM_VERSION ?= latest
-TERRAGRUNT_VERSION ?= latest
-TFGET_VERSION ?= latest
-TFLINT_VERSION ?= latest
-TFSEC_VERSION ?= latest
+# Tool versions default to the pins declared in the Dockerfile (single source
+# of truth, managed by dependency updates). Override on the command line for
+# ad-hoc builds, e.g. TERRAFORM_VERSION=1.9.0 make docker/build.
+dockerfile-arg = $(shell grep -E '^ARG $(1)=' Dockerfile | head -1 | cut -d= -f2)
+TERRAFORM_VERSION      ?= $(call dockerfile-arg,TERRAFORM_VERSION)
+TERRAGRUNT_VERSION     ?= $(call dockerfile-arg,TERRAGRUNT_VERSION)
+TERRAFORM_DOCS_VERSION ?= $(call dockerfile-arg,TERRAFORM_DOCS_VERSION)
+TFLINT_VERSION         ?= $(call dockerfile-arg,TFLINT_VERSION)
+TRIVY_VERSION          ?= $(call dockerfile-arg,TRIVY_VERSION)
+
+TERRAFORM_VERSION_PARTS = $(subst ., ,$(TERRAFORM_VERSION))
+TERRAFORM_VERSION_MAJOR = $(word 1,$(TERRAFORM_VERSION_PARTS))
+TERRAFORM_VERSION_MINOR = $(word 1,$(TERRAFORM_VERSION_PARTS)).$(word 2,$(TERRAFORM_VERSION_PARTS))
 
 GIT_BRANCH ?= $(shell git branch --show-current 2>/dev/null || echo 'unknown')
 GIT_HASH := $(shell git rev-parse --short HEAD 2>/dev/null || echo 'pre')
 
 DOCKER_TAGS ?=
-DOCKER_TAGS += --tag $(DOCKER_TAG_BASE):$(GIT_HASH)-$(TERRAFORM_VERSION)-$(DISTRO)
+DOCKER_TAGS += --tag $(DOCKER_TAG_BASE):$(GIT_HASH)-$(TERRAFORM_VERSION)
 ifeq ($(GIT_BRANCH), main)
 DOCKER_TAGS += --tag $(DOCKER_TAG_BASE):latest
 DOCKER_TAGS += --tag $(DOCKER_TAG_BASE):$(TERRAFORM_VERSION)
-DOCKER_TAGS += --tag $(DOCKER_TAG_BASE):$(TERRAFORM_VERSION)-$(DISTRO)
+DOCKER_TAGS += --tag $(DOCKER_TAG_BASE):$(TERRAFORM_VERSION_MINOR)
+DOCKER_TAGS += --tag $(DOCKER_TAG_BASE):$(TERRAFORM_VERSION_MAJOR)
 endif
 
 # Platform configuration - default to local platform for single-platform builds with --load
@@ -52,9 +59,8 @@ DOCKER_BUILD_ARGS ?=
 DOCKER_BUILD_ARGS += --build-arg TERRAFORM_DOCS_VERSION=$(TERRAFORM_DOCS_VERSION)
 DOCKER_BUILD_ARGS += --build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION)
 DOCKER_BUILD_ARGS += --build-arg TERRAGRUNT_VERSION=$(TERRAGRUNT_VERSION)
-DOCKER_BUILD_ARGS += --build-arg TFGET_VERSION=$(TFGET_VERSION)
 DOCKER_BUILD_ARGS += --build-arg TFLINT_VERSION=$(TFLINT_VERSION)
-DOCKER_BUILD_ARGS += --build-arg TFSEC_VERSION=$(TFSEC_VERSION)
+DOCKER_BUILD_ARGS += --build-arg TRIVY_VERSION=$(TRIVY_VERSION)
 DOCKER_BUILD_ARGS += --platform=$(DOCKER_PLATFORMS)
 # Only import cache if it exists and has content
 ifneq ($(wildcard $(DOCKER_BUILD_CACHE_PATH)/index.json),)
@@ -96,7 +102,7 @@ docker/build: docker/check
 ## Docker run image
 docker/run: docker/check
 	@echo "[INFO] Running '$(DOCKER_USER)/$(DOCKER_REPO)' docker image"
-	@docker run $(DOCKER_RUN_ARGS) "$(DOCKER_TAG_BASE):$(GIT_HASH)" bash
+	@docker run $(DOCKER_RUN_ARGS) "$(DOCKER_TAG_BASE):$(GIT_HASH)-$(TERRAFORM_VERSION)" bash
 .PHONY: docker/run
 
 ## Docker push image
@@ -107,9 +113,9 @@ docker/push: docker/check
 
 ## Docker clean build images
 docker/clean: docker/check
-	@if docker inspect --type=image "$(DOCKER_TAG_BASE):$(GIT_HASH)" > /dev/null 2>&1; then \
+	@if docker inspect --type=image "$(DOCKER_TAG_BASE):$(GIT_HASH)-$(TERRAFORM_VERSION)" > /dev/null 2>&1; then \
 		echo "[INFO] Removing docker image '$(DOCKER_USER)/$(DOCKER_REPO)'"; \
-		docker rmi -f $$(docker inspect --format='{{ .Id }}' --type=image $(DOCKER_TAG_BASE):$(GIT_HASH)); \
+		docker rmi -f $$(docker inspect --format='{{ .Id }}' --type=image $(DOCKER_TAG_BASE):$(GIT_HASH)-$(TERRAFORM_VERSION)); \
 	fi
 	@if [ -d "$(DOCKER_BUILD_CACHE_PATH)" ] && [ "$$(ls -A $(DOCKER_BUILD_CACHE_PATH))" ]; then \
 		echo "[INFO] Removing docker build cache found at '$(DOCKER_BUILD_CACHE_PATH)'"; \
@@ -118,8 +124,8 @@ docker/clean: docker/check
 .PHONY: docker/clean
 
 ## Initialize development environment
-dev/up: docker/lint docker/build docker/run
-.PHONY: dev/up
+dev: docker/lint docker/build docker/run
+.PHONY: dev
 
 #-------------------------------------------------------------------------------
 # clean
