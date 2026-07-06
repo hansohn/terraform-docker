@@ -181,7 +181,7 @@ Published images (on tagged releases and scheduled refreshes) additionally get:
 
 5. **After Merge:**
    - Your changes will be included in the next scheduled build
-   - Images are refreshed Monday, Wednesday, and Friday at 7am UTC
+   - Images are refreshed every Monday at 7am UTC
 
 ## Reporting Issues
 

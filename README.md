@@ -26,6 +26,7 @@
 </div>
 
 ## Table of Contents
+
 - [Description](#description)
 - [What's Included](#whats-included)
 - [Prerequisites](#prerequisites)
@@ -46,8 +47,7 @@ Welcome to my Terraform Docker repo. I've built this image with Terraform
 development and CI/CD in mind. The image contains various popular utilities often
 used in Terraform development. Utility versions are pinned in the Dockerfile and
 kept current through dependency-update PRs; the image is rebuilt and published to
-Docker Hub every Monday, Wednesday, and Friday to pick up base-image security
-patches.
+Docker Hub weekly (Mondays) to pick up base-image security patches.
 
 ## What's Included
 
@@ -96,6 +96,7 @@ ships provenance attestations and an SBOM bound to that digest.
 ## Platform Support
 
 This image supports multiple platforms:
+
 - `linux/amd64` (x86_64)
 - `linux/arm64` (ARM64/Apple Silicon)
 
@@ -125,7 +126,7 @@ convenience:
 Available targets:
 
   clean                               Clean everything
-  dev                                  Initialize development environment
+  dev                                 Initialize development environment
   docker/build                        Docker build image
   docker/check                        Check if Docker daemon is running
   docker/clean                        Docker clean build images
@@ -200,9 +201,10 @@ TERRAFORM_VERSION=1.2.3 make docker/build
 ## Build & Refresh Schedule
 
 Images are automatically:
+
 - **Built and linted** on every push (multi-platform, without publishing)
 - **Published** when a version tag is pushed
-- **Refreshed** every Monday, Wednesday, and Friday at 7am UTC to pick up the latest base-image security patches
+- **Refreshed** every Monday at 7am UTC to pick up the latest base-image security patches
 
 This ensures published images stay up-to-date with the latest base image security updates.
 
