@@ -43,11 +43,12 @@
 
 ## Description
 
-Welcome to my Terraform Docker repo. I've built this image with Terraform
-development and CI/CD in mind. The image contains various popular utilities often
-used in Terraform development. Utility versions are pinned in the Dockerfile and
-kept current through dependency-update PRs; the image is rebuilt and published to
-Docker Hub weekly (Mondays) to pick up base-image security patches.
+Welcome to my Terraform Docker repo. This is a Terraform docker image with
+additional tooling for development and CI/CD purposes. The image contains
+various popular utilities often used in Terraform development. Utility versions
+are pinned in the Dockerfile and kept current through dependency-update PRs; the
+image is rebuilt and published to Docker Hub weekly (Mondays) to pick up
+base-image security patches.
 
 ## What's Included
 
