@@ -1,4 +1,4 @@
-ARG UBUNTU_VERSION=noble
+ARG UBUNTU_VERSION=resolute
 
 
 # builder
