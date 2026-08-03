@@ -15,7 +15,7 @@ ARG TERRAFORM_DOCS_VERSION=v0.24.0
 # renovate: datasource=github-releases depName=terraform-linters/tflint
 ARG TFLINT_VERSION=v0.64.0
 # renovate: datasource=github-releases depName=aquasecurity/trivy extractVersion=^v(?<version>.+)$
-ARG TRIVY_VERSION=0.72.0
+ARG TRIVY_VERSION=0.73.0
 ENV CURL='curl -fsSL'
 ENV CACHE_DIR='/var/cache/github-api'
 # TARGETARCH/BUILDARCH are only populated by BuildKit; fail fast on the legacy
