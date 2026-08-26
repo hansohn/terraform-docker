@@ -6,6 +6,9 @@ on:
   push:
     branches:
       - '**'
+  # Weekly refresh at 07:17 UTC. This image is the base for terraform-aws,
+  # -azure, -digitalocean and -google, which refresh two hours later so their
+  # FROM resolves to whatever this run publishes.
   schedule:
     - cron: '17 7 * * 1'
   workflow_dispatch:
