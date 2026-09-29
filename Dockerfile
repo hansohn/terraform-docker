@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG BUILDARCH
 ARG TARGETARCH
 # renovate: datasource=github-releases depName=hashicorp/terraform extractVersion=^v(?<version>.+)$
-ARG TERRAFORM_VERSION=1.16.3
+ARG TERRAFORM_VERSION=1.16.4
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt
 ARG TERRAGRUNT_VERSION=v1.1.6
 # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
