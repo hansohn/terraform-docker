@@ -13,7 +13,7 @@ ARG TERRAGRUNT_VERSION=v1.1.6
 # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
 ARG TERRAFORM_DOCS_VERSION=v0.24.0
 # renovate: datasource=github-releases depName=terraform-linters/tflint
-ARG TFLINT_VERSION=v0.64.0
+ARG TFLINT_VERSION=v0.65.0
 # renovate: datasource=github-releases depName=aquasecurity/trivy extractVersion=^v(?<version>.+)$
 ARG TRIVY_VERSION=0.76.0
 ENV CURL='curl -fsSL'
