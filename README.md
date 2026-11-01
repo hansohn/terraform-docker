@@ -206,7 +206,7 @@ a release tag.
 
 - Images include provenance attestations and SBOM (Software Bill of Materials)
 - Published images are scanned for vulnerabilities with Trivy
-- Security vulnerabilities? See our [Security Policy](.github/SECURITY.md)
+- Security vulnerabilities? See our [Security Policy](https://github.com/hansohn/.github/blob/HEAD/SECURITY.md)
 
 ## Related Images
 
@@ -230,7 +230,7 @@ Contributions are welcome! Please see our [Contributing Guide](.github/CONTRIBUT
 
 - Report bugs via [Issues](https://github.com/hansohn/terraform-docker/issues)
 - Request features via [Feature Requests](https://github.com/hansohn/terraform-docker/issues/new?template=feature-request.yml)
-- Submit PRs following our [PR Template](.github/PULL_REQUEST_TEMPLATE.md)
+- Submit PRs following our [PR Template](https://github.com/hansohn/.github/blob/HEAD/PULL_REQUEST_TEMPLATE.md)
 
 ## License
 
