@@ -11,7 +11,7 @@ ARG TERRAFORM_VERSION=1.17.2
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt
 ARG TERRAGRUNT_VERSION=v1.2.2
 # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
-ARG TERRAFORM_DOCS_VERSION=v0.24.0
+ARG TERRAFORM_DOCS_VERSION=v0.25.1
 # renovate: datasource=github-releases depName=terraform-linters/tflint
 ARG TFLINT_VERSION=v0.66.0
 # renovate: datasource=github-releases depName=aquasecurity/trivy extractVersion=^v(?<version>.+)$
